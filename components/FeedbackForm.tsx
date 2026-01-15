@@ -28,20 +28,20 @@ const FeedbackForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     const uniqueId = Math.floor(Math.random() * 100000000);
-    
+
     // Format phone number
     const digitsOnly = formData.phone.replace(/\D/g, '');
     let formattedPhone = digitsOnly;
     if (digitsOnly.length > 0) {
-        if (!digitsOnly.startsWith('60')) {
-            if (digitsOnly.startsWith('0')) {
-                formattedPhone = '60' + digitsOnly.substring(1);
-            } else {
-                formattedPhone = '60' + digitsOnly;
-            }
+      if (!digitsOnly.startsWith('60')) {
+        if (digitsOnly.startsWith('0')) {
+          formattedPhone = '60' + digitsOnly.substring(1);
+        } else {
+          formattedPhone = '60' + digitsOnly;
         }
+      }
     }
 
     const apiPayload = {
@@ -65,10 +65,10 @@ const FeedbackForm: React.FC = () => {
        * 'Failed to fetch' usually means the server didn't respond with CORS headers or the test webhook is not active.
        * We use 'text/plain' as a strategy to minimize CORS preflight (OPTIONS request) issues if n8n is not configured for it.
        */
-      const response = await fetch('https://lwk888.app.n8n.cloud/webhook-test/case-submit', {
+      const response = await fetch('https://lwk888.app.n8n.cloud/webhook/case-submit', {
         method: 'POST',
         headers: {
-          'Content-Type': 'text/plain', 
+          'Content-Type': 'text/plain',
         },
         body: JSON.stringify(apiPayload),
       });
@@ -80,9 +80,9 @@ const FeedbackForm: React.FC = () => {
       setSubmitted(true);
     } catch (error) {
       console.error("Detailed Submission Error:", error);
-      
+
       let errorMessage = "Submission failed.";
-      
+
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
         errorMessage = "Network Error: 'Failed to fetch'.\n\nThis is likely a CORS issue or the n8n webhook is not 'Listening'.\n\nTips:\n1. Open your n8n workflow and click 'Listen for Test Event'.\n2. Ensure your n8n instance has CORS allowed for this domain.\n3. Verify your internet connection.";
       } else if (error instanceof Error) {
@@ -100,7 +100,7 @@ const FeedbackForm: React.FC = () => {
       <div className="max-w-2xl mx-auto mt-12 bg-white p-12 rounded-2xl shadow-xl border border-blue-50">
         <div className="flex flex-col items-center text-center space-y-6">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
           </div>
           <div className="space-y-2">
             <h2 className="text-3xl font-bold text-slate-800">Terima Kasih! / Thank You!</h2>
@@ -110,7 +110,7 @@ const FeedbackForm: React.FC = () => {
             </p>
           </div>
           <div className="w-full h-px bg-slate-100 my-4"></div>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="mt-4 px-10 py-3 bg-[#1e3a5f] text-white rounded-full font-bold hover:bg-[#152a45] transition-all shadow-lg active:scale-95"
           >
@@ -134,22 +134,22 @@ const FeedbackForm: React.FC = () => {
           </div>
           <div className="flex gap-8">
             <label className="flex items-center gap-2 cursor-pointer group">
-              <input 
-                type="radio" 
-                name="submitterType" 
+              <input
+                type="radio"
+                name="submitterType"
                 checked={formData.submitterType === 'Individual'}
                 onChange={() => handleRadioChange('submitterType', 'Individual')}
-                className="w-4 h-4 text-blue-600" 
+                className="w-4 h-4 text-blue-600"
               />
               <span className="text-sm font-medium group-hover:text-blue-600 transition-colors">Individu / Individual</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer group">
-              <input 
-                type="radio" 
-                name="submitterType" 
+              <input
+                type="radio"
+                name="submitterType"
                 checked={formData.submitterType === 'Organization'}
                 onChange={() => handleRadioChange('submitterType', 'Organization')}
-                className="w-4 h-4 text-blue-600" 
+                className="w-4 h-4 text-blue-600"
               />
               <span className="text-sm font-medium group-hover:text-blue-600 transition-colors">Organisasi / Organization</span>
             </label>
@@ -173,11 +173,11 @@ const FeedbackForm: React.FC = () => {
 
           <div className="pt-2"><label className="text-sm font-medium text-slate-600">Contact Number <span className="text-red-500">*</span></label></div>
           <div className="relative">
-             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none gap-2">
-               <span className="text-sm">🇲🇾 +60</span>
-               <div className="w-[1px] h-4 bg-gray-300"></div>
-             </div>
-             <input required name="phone" value={formData.phone} onChange={handleInputChange} placeholder="123456789" className="w-full pl-20 pr-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none gap-2">
+              <span className="text-sm">🇲🇾 +60</span>
+              <div className="w-[1px] h-4 bg-gray-300"></div>
+            </div>
+            <input required name="phone" value={formData.phone} onChange={handleInputChange} placeholder="123456789" className="w-full pl-20 pr-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
           </div>
 
           <div className="pt-2"><label className="text-sm font-medium text-slate-600">Mailing Address <span className="text-red-500">*</span></label></div>
@@ -195,7 +195,7 @@ const FeedbackForm: React.FC = () => {
           <div className="space-y-1 text-red-500 text-sm italic font-medium">
             <p>* Kindly refer to your registered email for our response</p>
           </div>
-          <button 
+          <button
             type="submit"
             disabled={isSubmitting}
             className="min-w-[220px] bg-[#4285f4] text-white px-8 py-4 rounded-full font-bold shadow-lg hover:bg-[#3367d6] transition-all disabled:opacity-50 flex items-center justify-center gap-2 active:scale-95"
