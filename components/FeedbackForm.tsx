@@ -63,12 +63,12 @@ const FeedbackForm: React.FC = () => {
       /**
        * Note for Developer: 
        * 'Failed to fetch' usually means the server didn't respond with CORS headers or the test webhook is not active.
-       * We use 'text/plain' as a strategy to minimize CORS preflight (OPTIONS request) issues if n8n is not configured for it.
+       * We use 'application/json' to ensure n8n parses the body as a JSON object.
        */
       const response = await fetch('https://lwk888.app.n8n.cloud/webhook/case-submit', {
         method: 'POST',
         headers: {
-          'Content-Type': 'text/plain',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(apiPayload),
       });
