@@ -60,33 +60,36 @@ const FeedbackForm: React.FC = () => {
     };
 
     try {
-      // Use standard fetch without unnecessary mode/accept headers that can trigger CORS preflight issues
+      /**
+       * Note for Developer: 
+       * 'Failed to fetch' usually means the server didn't respond with CORS headers or the test webhook is not active.
+       * We use 'text/plain' as a strategy to minimize CORS preflight (OPTIONS request) issues if n8n is not configured for it.
+       */
       const response = await fetch('https://lwk888.app.n8n.cloud/webhook-test/case-submit', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain', 
         },
         body: JSON.stringify(apiPayload),
       });
 
       if (!response.ok) {
-        throw new Error(`Server returned status ${response.status}`);
+        throw new Error(`HTTP ${response.status}`);
       }
 
       setSubmitted(true);
     } catch (error) {
-      console.error("Submission error detail:", error);
+      console.error("Detailed Submission Error:", error);
       
-      let msg = "Maaf, ralat berlaku semasa penghantaran. / Sorry, a submission error occurred.";
+      let errorMessage = "Submission failed.";
       
-      // If error is 'Failed to fetch', it's almost certainly CORS or the test webhook not being 'on'.
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
-        msg += "\n\nSILA AMBIL PERHATIAN:\n1. Pastikan anda telah klik 'Listen for Test Event' di n8n.\n2. Pastikan n8n anda membenarkan CORS.\n3. Cuba gunakan Webhook Production jika 'test' gagal.";
-      } else {
-        msg += `\n\nError: ${error instanceof Error ? error.message : 'Network Error'}`;
+        errorMessage = "Network Error: 'Failed to fetch'.\n\nThis is likely a CORS issue or the n8n webhook is not 'Listening'.\n\nTips:\n1. Open your n8n workflow and click 'Listen for Test Event'.\n2. Ensure your n8n instance has CORS allowed for this domain.\n3. Verify your internet connection.";
+      } else if (error instanceof Error) {
+        errorMessage = `Error: ${error.message}`;
       }
-      
-      alert(msg);
+
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
