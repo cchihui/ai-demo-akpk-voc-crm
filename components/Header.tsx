@@ -18,14 +18,14 @@ const Header: React.FC = () => {
       {/* Main Logo Bar */}
       <div className="flex justify-between items-center px-4 py-6 max-w-7xl mx-auto w-full">
         <div className="flex items-center">
-           <div className="flex items-center gap-1">
-             {/* Using local logo.png file reference as requested */}
-             <img 
-               src="/logo.png" 
-               alt="AKPK Logo" 
-               className="h-16 md:h-20 object-contain"
-             />
-           </div>
+          <div className="flex items-center gap-1">
+            {/* Using local logo.png file reference as requested */}
+            <img
+              src="/akpk-logo.png"
+              alt="AKPK Logo"
+              className="h-12 md:h-12 object-contain"
+            />
+          </div>
         </div>
       </div>
     </header>
